@@ -110,19 +110,6 @@ def get_weather():
 
 def get_rmv(last_public_transport_data,last_public_transport_fetch_time):
     if last_public_transport_fetch_time is None or (datetime.now(timezone) - last_public_transport_fetch_time) >= timedelta(minutes=refreshrate):
-        async def main():
-            async with aiohttp.ClientSession():
-                rmv = RMVtransport()
-                try:
-                    data = await rmv.get_departures(
-                        station_id=marburg_hans_meerwein_strasse,
-                        products=["Bus"], 
-                        max_journeys=1,
-                        direction_id=niederklein_allendorfer_strasse)
-                    return str(data)
-                except Exception as e:
-                    print(str(e))
-
         async def main(station_id,products,max_journeys,direction_id,time=None):
             async with aiohttp.ClientSession():
                     rmv = RMVtransport()
@@ -184,7 +171,7 @@ def index():
     online_players = get_online_players()
     real_world_weather = get_weather()
     public_transport = get_rmv(last_public_transport_data,last_public_transport_fetch_time)[0]
-    return "Players Online:<br>" + '<br>'.join(online_players) + "<br><br>" + real_world_weather + "<br><br>" + public_transport
+    return "Players Online:<br>" + '<br>'.join(online_players) + "<br><br>" + real_world_weather + "<br><br>" + public_transport + "<br><br>" + "Check out the source code at https://github.com/RexVizsla/status_monitor"
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080, host="0.0.0.0")
